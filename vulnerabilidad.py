@@ -5,11 +5,11 @@ import random
 
 G_APMS = nx.read_edgelist('yeast_AP-MS.txt')
 G_LIT  = nx.read_edgelist('yeast_LIT.txt')
-G_LITR = nx.read_edgelist('yeast_LIT_Reguly.txt')
+#G_LITR = nx.read_edgelist('yeast_LIT_Reguly.txt')
 G_Y2H  = nx.read_edgelist('yeast_Y2H.txt')
 
 N_APMS = G_APMS.nodes()
-#N_LIT  = G_LIT.nodes()
+N_LIT  = G_LIT.nodes()
 #N_LITR = G_LITR.nodes()
 N_Y2H  = G_Y2H.nodes()
 
