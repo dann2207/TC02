@@ -46,7 +46,7 @@ from funciones import ldata
 PaHe = ldata("Essential_ORFs_paperHe.txt")
 
 # La lista de los 1160 nodos esenciales es la siguiente
-ess_list = [x[1] for x in PaHe]
+ess_list = [x[1] for x in PaHe if len(x)>1]
 # Por ejemplo, un elemento de esta lista es:
 # PaHe[40][1] = 'YBR049C'
 
