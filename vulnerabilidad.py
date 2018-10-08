@@ -49,6 +49,8 @@ PaHe = ldata("Essential_ORFs_paperHe.txt")
 ess_list = [x[1] for x in PaHe if len(x)>1]
 # Por ejemplo, un elemento de esta lista es:
 # PaHe[40][1] = 'YBR049C'
+# Si queremos la lista de nodos esnciales de LIT:
+# ess_LIT = set(ess_list).intersection(set(G_LIT.nodes()))
 
 # Vamos a sacar 200 nodos
 M = 200
