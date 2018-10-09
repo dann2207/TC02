@@ -10,14 +10,15 @@ import math
 import matplotlib.pylab as plt
 import numpy as np
 
+  
 def ldata(archive):
-        f=open(archive)
-        data=[]
+        f = open(archive)
+        data = []
         for line in f:
-            line=line.strip()
-            col=line.split("\t") # Cambiamos las separaciones para que sean con tabs
+            col = line.split("\t")
+            col = [x.strip() for x in col]
             data.append(col)
-        return data
+        return data 
 
     
 # Armo las tablas en el programa
@@ -131,7 +132,7 @@ DSl=["LIT","Y2H","APMS","e_LITR"]
 G=nx.Graph()
 G.add_edges_from(DS[0])
 
-# Armo la lista de nodos con el grado asociado, la lsita NG (Nodos y Grados)
+# Armo la lista de nodos con el grado asociado, la lista NG (Nodos y Grados)
 
 NG=[[x[0],x[1]] for x in G.degree()]
 
@@ -142,17 +143,42 @@ def tomarsegundo (elem):
 
 NG.sort(key=tomarsegundo)
 
+LG=[x[1] for x in NG] #Los grados ordenados de mi lista NG
 
-fr=np.arange(0.05,1.05,0.05) # Porcentajes de Cutoff del Hub
+
+fr=np.arange(0,1.05,0.05) # Porcentajes de Cutoff del Hub
 
 
-#for i in fr:
-gradmin=math.floor((NG[len(NG)-1][1])*0.1)
-HUBS=NG
-print(gradmin)
-for grado in HUBS:
-    if grado[1] <= gradmin:
-        print(grado)
-        del(HUBS[0])
-print(gradmin)
-print(HUBS)
+# Con este comando armo la lista HUBS, que es una lista de listas, donde en cada
+# componente, guarda la lista de nodos con grado mayor al gradmin, y su correspondiente grado.
+HUBS=[]
+for i in range(len(fr)):
+    NG=[[x[0],x[1]] for x in G.degree()]
+    NG.sort(key=tomarsegundo)
+    gradmin=math.floor((NG[len(NG)-1][1])*fr[i])
+    for k in range(1,gradmin):
+        borrar=LG.count(k)
+        for m in range(borrar):
+            del(NG[0])
+    HUBS.append(NG)
+    
+# Ahora cuento en cada una de las listas, cuuál es la cantida de nodos esenciales
+
+
+Fraces=[] # Lista con la FRACción de nodos EScenciales para cada valor de gradmin
+
+for i in range(len(HUBS)):
+    num=0
+    for nodo1 in Ess:
+        for nodo2 in HUBS[i]:
+            if nodo1==nodo2[0]:
+                num += 1
+    num=num/(len(HUBS[i]))
+    Fraces.append(num)
+
+# Ya tengo lo que va en el eje y, necesito lo que va en el eje x y lo puedo graficar
+
+gradosmin=[1-i for i in fr]
+
+plt.plot(gradosmin,Fraces,"r")
+plt.show
