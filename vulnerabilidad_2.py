@@ -64,7 +64,7 @@ for x in G_APMS.nodes():
 	G = G_APMS.remove_node(x)
 	for a in G.nodes():
 		for b in G.nodes():
-			shortpaths = nx.all_shortest_paths(G,a,b)
+			shortpaths = nx.all_shortest_paths(G_APMS,a,b)
 			for path in shortpaths:
 				if x in path:
 					c += 1
