@@ -85,10 +85,15 @@ kdist_APMS = kdist(ess_APMS_set,G_APMS)
 # pero puede pasar que para algun k no haya tantos
 # nodos no esenciales con ese grado. Si eso pasa tenemos
 # que buscar nodos con grados cercanos, y sacar esos nodos.
-# Pero
+# Pero, al ir avanzando hacia otros grados cercanos, puede
+# que nos topemos con alguno de los k
 
+# Para empezar, sea K el conjunto de grados de 
+# los nodos esenciales
+K = {x[0] for x in kdist_APMS}
 
-
+# Sea K_buenos los k tales que haya suficientes
+# (nk o mas) nodos no esenciales con grado k
 
 
 
@@ -110,7 +115,7 @@ for x in G_APMS.nodes():
 	G = G_APMS.remove_node(x)
 	for a in G.nodes():
 		for b in G.nodes():
-			shortpaths = nx.all_shortest_paths(G,a,b)
+			shortpaths = nx.all_shortest_paths(G_APMS,a,b)
 			for path in shortpaths:
 				if x in path:
 					c += 1
