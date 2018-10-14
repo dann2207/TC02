@@ -1,5 +1,5 @@
 # Inciso (C)
-# Tabla 3 Zotenko
+# tabla 3 y figura 3 (Zotenko)
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
@@ -101,13 +101,25 @@ K_malos = K.difference(K_buenos)
 
 # Con los K_buenos no hay problema
 # Pero si partimos de un k_malo, tenemos que ir hacia k's
-# cercanos, acumulando sus nodos, hasta tener nk_malo
+# cercanos, acumulando sus nodos, hasta tener nk_malo (o mas)
 # nodos. Pero al ir hacia otros k's, nos podemos topar
 # con un k_bueno o un k_malo
 # Tenemos que decidir que hacer si se da alguno de esos
 # dos casos (con criterio...)
 
+# Nuestro k_malo es k1. Si nos topamos con otro k_malo,
+# digamos k2, ahora vamos a tener que buscar nk2 nodos mas,
+# o sea, ibamos buscando nk1 nodos, no los encontramos,
+# y ahora que nos topamos con k2 tenemos que encontrar
+# nk1 + nk2 nodos en total
+# Si, antes de llegar a los nk1 + nk2 nodos, nos volvemos
+# a topar con un k_malo = k3, vamos a tener que seguir
+# avanzando, hasta llegar a tener nk1 + nk2 + nk3 nodos
+# (como minimo). Y asi siguiendo...
+# Que hacemos si, antes de juntar los nodos, llegamos
+# a un k_bueno?
 
+# Lo anterior en algun momento se termina (creo)
 
 
 
