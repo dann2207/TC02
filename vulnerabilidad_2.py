@@ -116,10 +116,17 @@ K_malos = K.difference(K_buenos)
 # a topar con un k_malo = k3, vamos a tener que seguir
 # avanzando, hasta llegar a tener nk1 + nk2 + nk3 nodos
 # (como minimo). Y asi siguiendo...
-# Que hacemos si, antes de juntar los nodos, llegamos
-# a un k_bueno?
 
 # Lo anterior en algun momento se termina (creo)
+
+# Que hacemos si, antes de juntar los nodos, llegamos
+# a un k_bueno?
+# Propongo que si eso pasa, saquemos los nodos que faltan
+# de los esenciales (con grados (K_malos) k1, k2, etc ),
+# "al azar". Voy a pensar en como hacer esto solo si en
+# el codigo vemos que sale mal y hay que hacerlo si o si
+
+
 
 
 
