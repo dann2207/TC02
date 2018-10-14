@@ -93,10 +93,19 @@ kdist_APMS = kdist(ess_APMS_set,G_APMS)
 K = {x[0] for x in kdist_APMS}
 
 # Sea K_buenos los k tales que haya suficientes
-# (nk o mas) nodos no esenciales con grado k
+# (nk o mas) nodos no esenciales con grado k,
+# y K_malos los k restantes
+from funciones import esbueno
+K_buenos = {k for k in K if esbueno(k) == True}
+K_malos = K.difference(K_buenos)
 
-
-
+# Con los K_buenos no hay problema
+# Pero si partimos de un k_malo, tenemos que ir hacia k's
+# cercanos, acumulando sus nodos, hasta tener nk_malo
+# nodos. Pero al ir hacia otros k's, nos podemos topar
+# con un k_bueno o un k_malo
+# Tenemos que decidir que hacer si se da alguno de esos
+# dos casos (con criterio...)
 
 
 
