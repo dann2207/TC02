@@ -20,12 +20,12 @@ def ldata(archive):
 # Hace falta especificar G ya que hay proteinas
 # repetidas en varias redes distintas
 def kdist(node_list,G):
-	D = {}
-	for n in node_list:
-		k = G.degree(n)
-		if k not in D.keys():
-			D[k] = 1
-		else:
-			D[k] += 1
-	tuple_list = sorted(D.items(),key=lambda x:x[0])
-	return tuple_list
+    D = {}
+    for n in node_list:
+        k = G.degree(n)
+        if k not in D.keys():
+            D[k] = 1
+        else:
+            D[k] += 1
+    tuple_list = sorted(D.items(),key=lambda x:x[0])
+    return tuple_list
