@@ -101,7 +101,7 @@ K = {x[0] for x in kdist_APMS}
 # (nk o mas) nodos no esenciales con grado k,
 # y K_malos los k restantes
 from funciones import esbueno
-K_buenos = {k for k in K if esbueno(k) == True}
+K_buenos = {k for k in K if esbueno(k,ess_APMS_set,G) == True}
 K_malos = K.difference(K_buenos)
 
 # Con los K_buenos no hay problema

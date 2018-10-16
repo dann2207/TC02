@@ -69,8 +69,10 @@ def nod_k(G):
 #
 def esbueno(k,ess_list,G):
     a = len([x for x in ess_list if k==G.degree(x)])
+    # a = cantidad de nodos esenciales con grado k
     b = len(nod_k(G)[k])
-    if a <= b:
+    # b = cantidad de nodos con grado k
+    if 2*a <= b:
         return True
     else:
         return False
