@@ -58,7 +58,7 @@ G = G_APMS.copy()
 ess_APMS_set = set(ess_list).intersection(set(G.nodes()))
 # Sacamos los nodos esenciales:
 for n in ess_APMS_set:
-	G.remove_node(n)
+    G.remove_node(n)
 
 # Ahora, nos fijamos en la componente gigante superviviente
 giant = max(nx.connected_component_subgraphs(G), key=len)
@@ -134,22 +134,25 @@ K_malos = K.difference(K_buenos)
 # Armamos un diccionario
 # en las que las keys son los grados k
 # y los values son los k's mas proximos por debajo
+from funciones import ktup2
 k_k = ktup2(K)
 
 # F[k] = lista de nodos NO esenciales con grado k
+from funciones import nod_k
 K_todos = {G.degree(n) for n in G.nodes()}
-F = {k: list(set(nod_k(G)[k]).difference(ess_APMS_set)) for k in K_todos}
+nodk = nod_k(G)
+F = {k: list(set(nodk[k]).difference(ess_APMS_set)) for k in K_todos}
 
 H = {}
 for k in K_malos:
-	nk = kd[k]
-	N = [] # lista de nodos acumulada
-	N.append(F[k])
-	while len(N)<nk and k-j>k_k[k]:
-		N.append(F[k-j])
-	# "Recemos" para que el while haya terminado
-	# con len(N)>nk
-	H[k] = N
+    nk = kd[k]
+    N = [] # lista de nodos acumulada
+    N.append(F[k])
+    while len(N)<nk and k-j>k_k[k]:
+        N.append(F[k-j])
+    # "Recemos" para que el while haya terminado
+    # con len(N)>nk
+    H[k] = N
 # Las keys de H son los k_malos
 # los values son las listas (si todo salio bien, ya que nuestro 
 # "rezo" pudo no haber sido escuchado) de nodos no esenciales
@@ -164,7 +167,7 @@ for k in K_malos:
 
 # Completemos a H con los k_buenos
 for k in K_buenos:
-	H[k] = F[k]
+    H[k] = F[k]
 
 # 1 ensayo consiste en sacar nk nodos para los 
 # k_esenciales, y medir r
@@ -176,15 +179,15 @@ M = 200
 R = []
 # Me falta revisar mejor lo siguiente
 for i in range(M):
-	for k in K:
-		nk = kd[k]
-		rs = random.sample(H[k],nk)
-		for n in ess_APMS_set:
-			G.remove_node(n)
-		gig = max(nx.connected_component_subgraphs(G), key=len)
-		r = len(gig)/len(G_APMS)
-		R.append(r)
-		G = G_APMS.copy()
+    for k in K:
+        nk = kd[k]
+        rs = random.sample(H[k],nk)
+        for n in ess_APMS_set:
+            G.remove_node(n)
+        gig = max(nx.connected_component_subgraphs(G), key=len)
+        r = len(gig)/len(G_APMS)
+        R.append(r)
+        G = G_APMS.copy()
 
 
 
@@ -198,15 +201,15 @@ for i in range(M):
 # Shortest-path:
 SP = {}
 for x in G_APMS.nodes():
-	G = G_APMS.remove_node(x)
-	for a in G.nodes():
-		for b in G.nodes():
-			shortpaths = nx.all_shortest_paths(G_APMS,a,b)
-			for path in shortpaths:
-				if x in path:
-					c += 1
-		G.remove_node(a)
-	SP[x] = c
+    G = G_APMS.remove_node(x)
+    for a in G.nodes():
+        for b in G.nodes():
+            shortpaths = nx.all_shortest_paths(G_APMS,a,b)
+            for path in shortpaths:
+                if x in path:
+                    c += 1
+        G.remove_node(a)
+    SP[x] = c
 # Hasta aca, D[x] = cantidad de shortest-paths
 # que pasan por el nodo x
 
@@ -222,7 +225,7 @@ w,v = scipy.sparse.linalg.eigs()
 # Nodos esenciales de esta red:
 ess_Y2H = set(ess_list).intersection(set(G_Y2H.nodes()))
 for n in ess_Y2H:
-	G_Y2H.remove_node(n)
+    G_Y2H.remove_node(n)
 
 Gc = max(nx.connected_component_subgraphs(G_Y2H), key=len)
 r_Y2H = len(Gc)/len(G_Y2H)
@@ -232,7 +235,7 @@ r_Y2H = len(Gc)/len(G_Y2H)
 # Nodos esenciales de esta red:
 ess_LIT = set(ess_list).intersection(set(G_LIT.nodes()))
 for n in ess_LIT:
-	G_LIT.remove_node(n)
+    G_LIT.remove_node(n)
 
 Gc = max(nx.connected_component_subgraphs(G_LIT), key=len)
 r_LIT = len(Gc)/len(G_LIT)

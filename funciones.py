@@ -56,14 +56,22 @@ def ktup2(k):
 
 # nod_k es un dicionario 
 # "k: lista de nodos con grado k"
+# Por alguna razon no funciono lo de abajo
+#def nod_k(G):
+    #D = {}
+    #for n in G.nodes():
+        #if G.degree(n) not in D.keys():
+            #k = G.degree(n)
+            #D[k] = [n]
+        #else:
+            #D[k].append(n)
+    #return D
+
 def nod_k(G):
     D = {}
-    for n in G.nodes():
-        if G.degree(n) not in D.keys():
-            k = G.degree(n)
-            D[k] = [n]
-        else:
-            D[k].append(n)
+    K = {G.degree(n) for n in G.nodes()}
+    for k in K:
+        D[k] = [x for x in G.nodes() if k==G.degree(x)]
     return D
 
 #
