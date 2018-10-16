@@ -77,81 +77,14 @@ kdist_APMS = kdist(ess_APMS_set,G_APMS)
 # Ahora, pasamos a lo mas dificil de todo este codigo,
 # que es el criterio
 
-# En kdist_APMS hay tuplas (k,nk)
-# De ahi sacamos los grados k de los nodos esenciales
-# Asi como tenemos la red, tenemos que buscar, para
-# cada k, otros nk nodos con grado k (ninguno de esos
-# otros puede ser un nodo esencial)
-# Habra ciertos k para los que esto se pueda hacer,
-# pero puede pasar que para algun k no haya tantos
-# nodos no esenciales con ese grado. Si eso pasa tenemos
-# que buscar nodos con grados cercanos, y sacar esos nodos.
-# Pero, al ir avanzando hacia otros grados cercanos, puede
-# que nos topemos con alguno de los k
+# Idea de Fabio
 
-# Para empezar, sea K el conjunto de grados de 
-# los nodos esenciales
-K = {x[0] for x in kdist_APMS}
+# Cantidad de nodos esenciales:
+N = sum([x[1] for x in kdist_APMS])
 
-# Sea K_buenos los k tales que haya suficientes
-# (nk o mas) nodos no esenciales con grado k,
-# y K_malos los k restantes
-from funciones import esbueno
-K_buenos = {k for k in K if esbueno(k) == True}
-K_malos = K.difference(K_buenos)
+# Promedio de los k esenciales:
+p = sum([x[0]*x[1] for x in kdist_APMS])/N
 
-# Con los K_buenos no hay problema
-# Pero si partimos de un k_malo, tenemos que ir hacia k's
-# cercanos, acumulando sus nodos, hasta tener nk_malo (o mas)
-# nodos. Pero al ir hacia otros k's, nos podemos topar
-# con un k_bueno o un k_malo
-# Tenemos que decidir que hacer si se da alguno de esos
-# dos casos (con criterio...)
-
-# Nuestro k_malo es k1. Si nos topamos con otro k_malo,
-# digamos k2, ahora vamos a tener que buscar nk2 nodos mas,
-# o sea, ibamos buscando nk1 nodos, no los encontramos,
-# y ahora que nos topamos con k2 tenemos que encontrar
-# nk1 + nk2 nodos en total
-# Si, antes de llegar a los nk1 + nk2 nodos, nos volvemos
-# a topar con un k_malo = k3, vamos a tener que seguir
-# avanzando, hasta llegar a tener nk1 + nk2 + nk3 nodos
-# (como minimo). Y asi siguiendo...
-
-# Lo anterior en algun momento se termina (creo)
-
-# Que hacemos si, antes de juntar los nodos, llegamos
-# a un k_bueno?
-# Propongo que si eso pasa, saquemos los nodos que faltan
-# de los esenciales (con grados (K_malos) k1, k2, etc ),
-# "al azar". Voy a pensar en como hacer esto solo si en
-# el codigo vemos que sale mal y hay que hacerlo si o si
-
-# Armamos un diccionario
-# en las que las keys son los grados k
-# y los values son los k's mas proximos por debajo
-k_k = ktup2(K)
-
-# F[k] = lista de nodos NO esenciales con grado k
-K_todos = {G.degree(n) for n in G.nodes()}
-F = {k: list(set(nod_k(G)[k]).difference(ess_APMS_set))\
- for k in K_todos}
-
-H = {}
-for k in K_malos:
-	N = [] # lista de nodos acumulada
-	N.append(F[k])
-	while len(N)<nk and k-j>k_k[k]:
-		N.append(F[k-j])
-	# "Recemos" para que el while haya terminado
-	# con len(N)>nk
-	H[k] = N
-# Las keys de H son los k_malos
-# los values son las listas (si todo salio bien) de nodos no esenciales
-# con "grado parecido", de las que vamos a sacar
-# nk nodos al azar varias veces (o todas las veces posible)
-# De ahi va a salir un valor medio y una dispersion en
-# ese ratio r
 
 
 
