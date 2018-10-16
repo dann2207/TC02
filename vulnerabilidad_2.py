@@ -148,8 +148,10 @@ for k in K_malos:
     nk = kd[k]
     N = [] # lista de nodos acumulada
     N.append(F[k])
+    j = 1
     while len(N)<nk and k-j>k_k[k]:
         N.append(F[k-j])
+        j+=1
     # "Recemos" para que el while haya terminado
     # con len(N)>nk
     H[k] = N
