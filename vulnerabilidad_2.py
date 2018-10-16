@@ -67,12 +67,16 @@ giant = max(nx.connected_component_subgraphs(G), key=len)
 # (Seria la columna "Essential" de la tabla 3)
 r_APMS = len(giant)/len(G_APMS)
 
+# Volvemos a definir G y aca no paso nada
+G = G_APMS.copy()
+
 # Ahora, hay que hacer la otra columna...
 # Recordemos que ess_APMS_set es el conjunto de
 # nodos esenciales de la red. A partir de este
 # conjunto, calculamos la distribución de grados:
 from funciones import kdist
 kdist_APMS = kdist(ess_APMS_set,G_APMS)
+kd = dict(kdist_APMS)
 
 # Ahora, pasamos a lo mas dificil de todo este codigo,
 # que es el criterio
@@ -134,11 +138,11 @@ k_k = ktup2(K)
 
 # F[k] = lista de nodos NO esenciales con grado k
 K_todos = {G.degree(n) for n in G.nodes()}
-F = {k: list(set(nod_k(G)[k]).difference(ess_APMS_set))\
- for k in K_todos}
+F = {k: list(set(nod_k(G)[k]).difference(ess_APMS_set)) for k in K_todos}
 
 H = {}
 for k in K_malos:
+	nk = kd[k]
 	N = [] # lista de nodos acumulada
 	N.append(F[k])
 	while len(N)<nk and k-j>k_k[k]:
@@ -147,13 +151,40 @@ for k in K_malos:
 	# con len(N)>nk
 	H[k] = N
 # Las keys de H son los k_malos
-# los values son las listas (si todo salio bien) de nodos no esenciales
+# los values son las listas (si todo salio bien, ya que nuestro 
+# "rezo" pudo no haber sido escuchado) de nodos no esenciales
 # con "grado parecido", de las que vamos a sacar
 # nk nodos al azar varias veces (o todas las veces posible)
 # De ahi va a salir un valor medio y una dispersion en
 # ese ratio r
 
+# Me parece que seria demasiado pesado si optamos por
+# sacar de todas las formas posibles
+# Saquemos unos 200 (ponele)
 
+# Completemos a H con los k_buenos
+for k in K_buenos:
+	H[k] = F[k]
+
+# 1 ensayo consiste en sacar nk nodos para los 
+# k_esenciales, y medir r
+# Queremos hacer M ensayos
+# y guardar los r que van resutando en una lista R
+# Despues, sobre esa lista R vamos a poder sacar 
+# el valor medio y la varianza (por fin)
+M = 200
+R = []
+# Me falta revisar mejor lo siguiente
+for i in range(M):
+	for k in K:
+		nk = kd[k]
+		rs = random.sample(H[k],nk)
+		for n in ess_APMS_set:
+			G.remove_node(n)
+		gig = max(nx.connected_component_subgraphs(G), key=len)
+		r = len(gig)/len(G_APMS)
+		R.append(r)
+		G = G_APMS.copy()
 
 
 

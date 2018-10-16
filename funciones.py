@@ -35,43 +35,43 @@ def kdist(node_list,G):
 # ktup[i] = (k_i, k mas proximo (puede ser una lista de 2 elem))
 # K puede ser lista o set
 def ktup(K):
-	K = list(K)
-	tup = []
-	for k in K:
-		l = []
-		d = min([np.abs(k-j) for j in K if j!=k])
-		for j in K:
-			if np.abs(k-j) == d:
-				l.append(j)
-		tup.append((k,l))
-	return tup
+    K = list(K)
+    tup = []
+    for k in K:
+        l = []
+        d = min([np.abs(k-j) for j in K if j!=k])
+        for j in K:
+            if np.abs(k-j) == d:
+                l.append(j)
+        tup.append((k,l))
+    return tup
 
 def ktup2(k):
-	k = sorted(k)
-	k.insert(0,0) # mete un cero a la izq
-	l = []
-	for i in range(len(k)-1):
-		l.append(k[i])
-	return dict(zip(k[1:],l))
+    k = sorted(k)
+    k.insert(0,0) # mete un cero a la izq
+    l = []
+    for i in range(len(k)-1):
+        l.append(k[i])
+    return dict(zip(k[1:],l))
 
 # nod_k es un dicionario 
 # "k: lista de nodos con grado k"
 def nod_k(G):
-	D = {}
-	for n in G.nodes():
-		if G.degree(n) not in D.keys():
-			k = G.degree(n)
-			D[k] = [n]
-		else:
-			D[k].append(n)
-	return D
+    D = {}
+    for n in G.nodes():
+        if G.degree(n) not in D.keys():
+            k = G.degree(n)
+            D[k] = [n]
+        else:
+            D[k].append(n)
+    return D
 
 #
 def esbueno(k,ess_list,G):
-	a = len([x in ess_list if G.degree(x)==k])
-	b = len(nod_k(G)[k])
-	if a <= b:
-		return True
-	else:
-		return False
+    a = len([x for x in ess_list if k==G.degree(x)])
+    b = len(nod_k(G)[k])
+    if a <= b:
+        return True
+    else:
+        return False
 
