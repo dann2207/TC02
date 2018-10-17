@@ -166,10 +166,10 @@ for k in K_malos:
             N.append(H[k-j][0])
             del(H[k-j][0])
             a=nk-len(N)
-            print("Faltan {} elementos".format(a))
-            print("Nodos NE de grado {}".format(k))
-            print("Estoy tomando nodos de grado {}".format(k-j))
-            print("Puedo tomar {} nodos mas".format(len(H[k-j])-kd[k-j]))
+            #print("Faltan {} elementos".format(a))
+            #print("Nodos NE de grado {}".format(k))
+            #print("Estoy tomando nodos de grado {}".format(k-j))
+            #print("Puedo tomar {} nodos mas".format(len(H[k-j])-kd[k-j]))
         else:
             j+=1
     #¿Que hacemos si len(N) no es mayor que nk?
@@ -203,22 +203,24 @@ for k in H.keys():
 # y guardar los r que van resutando en una lista R
 # Despues, sobre esa lista R vamos a poder sacar 
 # el valor medio y la varianza (por fin)
-M = 200
+M = 20
 R = []
 # Me falta revisar mejor lo siguiente
 for i in range(M):
+    l = []
     for k in K:
         nk = kd[k]
         rs = random.sample(H[k],nk)
-        for n in rs:
-            G.remove_node(n)
-        gig = max(nx.connected_component_subgraphs(G), key=len)
-        r = len(gig)/len(G_APMS)
-        R.append(r)
-        G = G_APMS.copy()
+        for x in rs:
+            l.append(x)
+    for n in l:
+        G.remove_node(n)
+    gig = max(nx.connected_component_subgraphs(G), key=len)
+    r = len(gig)/len(G_APMS)
+    R.append(r)
+    G = G_APMS.copy()
 
-
-
+# SIIII salio bien!
 
 
 
@@ -267,4 +269,3 @@ for n in ess_LIT:
 
 Gc = max(nx.connected_component_subgraphs(G_LIT), key=len)
 r_LIT = len(Gc)/len(G_LIT)
-
