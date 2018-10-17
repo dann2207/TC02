@@ -170,7 +170,7 @@ for k in K_malos:
                 print(a)
                 print(k)
                 print(k-j)
-                j+=1
+        j+=1
     #¿Que hacemos si len(N) no es mayor que nk?
     # Pidámole prestado nodos a las listas del dict anterior
     # "Recemos" para que el while haya terminado
@@ -183,6 +183,10 @@ for k in K_malos:
 # nk nodos al azar varias veces (o todas las veces posible)
 # De ahi va a salir un valor medio y una dispersion en
 # ese ratio r
+
+for j in range(1,5):
+    print(j)
+
 
 for k in H.keys():
     if len(H[k])<kd[k]:
