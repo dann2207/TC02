@@ -143,15 +143,36 @@ K_todos = {G.degree(n) for n in G.nodes()}
 nodk = nod_k(G)
 F = {k: list(set(nodk[k]).difference(ess_APMS_set)) for k in K_todos}
 
+
+for k in range(127):
+    if k not in F.keys():
+        F[k]=[]
+
 H = {}
+
+# Completemos a H con los k_buenos
+for k in K_buenos:
+    H[k] = F[k]
+
+
 for k in K_malos:
     nk = kd[k]
     N = [] # lista de nodos acumulada
-    N.append(F[k])
+    for c in range(len(F[k])):
+        N.append(F[k][c])
     j = 1
-    while len(N)<nk and k-j>k_k[k]:
-        N.append(F[k-j])
-        j+=1
+    while len(N)<nk and k-j>0:
+        if k-j in K_buenos:
+            if len(H[k-j])>kd[k-j]:
+                N.append(H[k-j][0])
+                del(H[k-j][0])
+                a=len(N)-nk
+                print(a)
+                print(k)
+                print(k-j)
+                j+=1
+    #¿Que hacemos si len(N) no es mayor que nk?
+    # Pidámole prestado nodos a las listas del dict anterior
     # "Recemos" para que el while haya terminado
     # con len(N)>nk
     H[k] = N
@@ -163,13 +184,15 @@ for k in K_malos:
 # De ahi va a salir un valor medio y una dispersion en
 # ese ratio r
 
+for k in H.keys():
+    if len(H[k])<kd[k]:
+        print(k)
+
+
 # Me parece que seria demasiado pesado si optamos por
 # sacar de todas las formas posibles
 # Saquemos unos 200 (ponele)
 
-# Completemos a H con los k_buenos
-for k in K_buenos:
-    H[k] = F[k]
 
 # 1 ensayo consiste en sacar nk nodos para los 
 # k_esenciales, y medir r
@@ -184,7 +207,7 @@ for i in range(M):
     for k in K:
         nk = kd[k]
         rs = random.sample(H[k],nk)
-        for n in ess_APMS_set:
+        for n in rs:
             G.remove_node(n)
         gig = max(nx.connected_component_subgraphs(G), key=len)
         r = len(gig)/len(G_APMS)
