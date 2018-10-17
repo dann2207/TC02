@@ -162,15 +162,16 @@ for k in K_malos:
         N.append(F[k][c])
     j = 1
     while len(N)<nk and k-j>0:
-        if k-j in K_buenos:
-            if len(H[k-j])>kd[k-j]:
-                N.append(H[k-j][0])
-                del(H[k-j][0])
-                a=len(N)-nk
-                print(a)
-                print(k)
-                print(k-j)
-        j+=1
+        if k-j in K_buenos and len(H[k-j])>kd[k-j]:
+            N.append(H[k-j][0])
+            del(H[k-j][0])
+            a=nk-len(N)
+            print("Faltan {} elementos".format(a))
+            print("Nodos NE de grado {}".format(k))
+            print("Estoy tomando nodos de grado {}".format(k-j))
+            print("Puedo tomar {} nodos mas".format(len(H[k-j])-kd[k-j]))
+        else:
+            j+=1
     #¿Que hacemos si len(N) no es mayor que nk?
     # Pidámole prestado nodos a las listas del dict anterior
     # "Recemos" para que el while haya terminado
@@ -184,13 +185,11 @@ for k in K_malos:
 # De ahi va a salir un valor medio y una dispersion en
 # ese ratio r
 
-for j in range(1,5):
-    print(j)
 
 
 for k in H.keys():
     if len(H[k])<kd[k]:
-        print(k)
+        print("Para el grado {} te faltan nodos".format(k))
 
 
 # Me parece que seria demasiado pesado si optamos por
