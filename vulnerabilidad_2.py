@@ -143,8 +143,8 @@ K_todos = {G.degree(n) for n in G.nodes()}
 nodk = nod_k(G)
 F = {k: list(set(nodk[k]).difference(ess_APMS_set)) for k in K_todos}
 
-
-for k in range(127):
+k_max = max(G.degree(n) for n in G.nodes())
+for k in range(k_max):
     if k not in F.keys():
         F[k]=[]
 
