@@ -287,24 +287,68 @@ ess_list = [x[1] for x in PaHe if len(x)>1]
 # Ahora, nos fijamos en la componente gigante superviviente
 #giant = max(nx.connected_component_subgraphs(G), key=len)
 
-# Centraldiad Betwenness
-# Creo que funca de una
+## Centralidad Betwenness
+## Creo que funca de una
+#p=0
+#BEW=nx.betweenness_centrality(Grafos[p])
+#
+#CBW=[[x[0],x[1]] for x in BEW.items()]
+#CBW.sort(key=lambda x:x[1],reverse=True)
+#
+#veces=math.floor(len(Grafos[p].nodes())*0.3)
+#TO=len(max(nx.connected_component_subgraphs(Grafos[p]), key=len))
+#
+#Y=[]
+#X=[]
+#
+#for v in range(veces):
+#    Grafos[p].remove_node(CBW[v][0])
+#    giant = max(nx.connected_component_subgraphs(Grafos[p]), key=len)
+#    x=1-len(Grafos[p].nodes())/len(CBW)
+#    y=len(giant)/TO
+#    Y.append(y)
+#    X.append(x)
+#
+#plt.plot(X,Y,"{}".format(mar[p]),label="{}".format(DSl[p]))
+#
+#plt.grid(True)
+#plt.rcParams["figure.figsize"] = [10,5]
+#plt.xlabel("Fraccion de nodos removidos")
+#plt.ylabel("Fracción del tamaño de la componente gigante")
+#plt.title("Impacto de la remoción de nodos en función de la centralidad")
+#plt.legend()
+#plt.show()
+
+G_APMS = nx.Graph()
+G_APMS.add_edges_from(DS[2])
+G_LIT  = nx.Graph()
+G_LIT.add_edges_from(DS[0])
+G_Y2H  = nx.Graph()
+G_Y2H.add_edges_from(DS[1])
+G_LITR = nx.Graph()
+G_LITR.add_edges_from(DS[3])
+
+#Centralidad por grado
 p=0
-BEW=nx.betweenness_centrality(Grafos[p])
 
-CBW=[[x[0],x[1]] for x in BEW.items()]
-CBW.sort(key=lambda x:x[1],reverse=True)
+NG=[[x[0],x[1]] for x in Grafos[p].degree()]
 
-veces=math.floor(len(Grafos[p])*0.3)
+def tomarsegundo (elem):
+        return elem[1]
+
+NG.sort(key=tomarsegundo,reverse=True)
+
+
+veces=math.floor(len(Grafos[p].nodes())*0.3)
 TO=len(max(nx.connected_component_subgraphs(Grafos[p]), key=len))
 
 Y=[]
 X=[]
 
 for v in range(veces):
-    Grafos[p].remove_node(CBW[v][0])
+    Grafos[p].remove_node(NG[v][0])
     giant = max(nx.connected_component_subgraphs(Grafos[p]), key=len)
-    x=1-len(Grafos[p].nodes())/len(CBW)
+    x=1-len(Grafos[p].nodes())/len(NG)
     y=len(giant)/TO
     Y.append(y)
     X.append(x)
@@ -318,6 +362,15 @@ plt.ylabel("Fracción del tamaño de la componente gigante")
 plt.title("Impacto de la remoción de nodos en función de la centralidad")
 plt.legend()
 plt.show()
+
+
+
+
+
+
+
+
+
 
 
 
