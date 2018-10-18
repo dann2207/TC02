@@ -4,6 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 import numpy as np
+import math
 
 
 def ldata(archive):
@@ -34,6 +35,20 @@ PaHe=ldata("Essential_ORFs_paperHe.txt")
 e_LITR=[[x[0],x[1]]  for x in LITR]
 del(e_LITR[0])
 
+# Con el siguiente comando armo la lista de proteínas esenciales
+
+
+del(PaHe[len(PaHe)-1])
+del(PaHe[len(PaHe)-1])
+del(PaHe[len(PaHe)-1])
+del(PaHe[len(PaHe)-1])
+
+Ess=[x[1] for x in PaHe]
+del(Ess[0])
+del(Ess[0])
+
+Ness=[x.split("-") for x in Ess]
+Ness=[x[0] for x in Ness]
 
 # Armé una lista que es los datasets (DS) y otra que es los nombres 
 # de los datasets (DSl), donde la l es por labels
@@ -51,10 +66,13 @@ G_Y2H.add_edges_from(DS[1])
 G_LITR = nx.Graph()
 G_LITR.add_edges_from(DS[3])
 
-Gl=["G_LIT","G_Y2H","G_APMS","G_LITR"]
+Gl=["LIT","Y2H","APMS","LITR"]
 Grafos=[G_LIT,G_Y2H,G_APMS,G_LITR]
 #SAS=[]
 #Sis=[]
+
+mar=["r","b","k","g"]
+
 
 #--------------------------------------------------------
 # Ahora veamos si algun par de redes comparte proteinas
@@ -266,7 +284,40 @@ ess_list = [x[1] for x in PaHe if len(x)>1]
 #            SAS.append(A)
 
 
+# Ahora, nos fijamos en la componente gigante superviviente
+#giant = max(nx.connected_component_subgraphs(G), key=len)
 
+# Centraldiad Betwenness
+# Creo que funca de una
+p=0
+BEW=nx.betweenness_centrality(Grafos[p])
+
+CBW=[[x[0],x[1]] for x in BEW.items()]
+CBW.sort(key=lambda x:x[1],reverse=True)
+
+veces=math.floor(len(Grafos[p])*0.3)
+TO=len(max(nx.connected_component_subgraphs(Grafos[p]), key=len))
+
+Y=[]
+X=[]
+
+for v in range(veces):
+    Grafos[p].remove_node(CBW[v][0])
+    giant = max(nx.connected_component_subgraphs(Grafos[p]), key=len)
+    x=1-len(Grafos[p].nodes())/len(CBW)
+    y=len(giant)/TO
+    Y.append(y)
+    X.append(x)
+
+plt.plot(X,Y,"{}".format(mar[p]),label="{}".format(DSl[p]))
+
+plt.grid(True)
+plt.rcParams["figure.figsize"] = [10,5]
+plt.xlabel("Fraccion de nodos removidos")
+plt.ylabel("Fracción del tamaño de la componente gigante")
+plt.title("Impacto de la remoción de nodos en función de la centralidad")
+plt.legend()
+plt.show()
 
 
 
@@ -274,28 +325,6 @@ ess_list = [x[1] for x in PaHe if len(x)>1]
 #    # Nodos esenciales de esta red:
 #    G = Grafos[i].copy()
 #    ess_set = set(ess_list).intersection(set(G.nodes()))
-
-# Shortest-path:
-i=0
-SP = {}
-A=[m for m in Grafos[i].nodes()]
-for x in A:
-    c=0
-    Grafos[i].add_edges_from(DS[i])
-    for a in Grafos[i].nodes():
-        if a!=x:
-            for b in Grafos[i].nodes():
-                if b!=x:
-                    shortpaths = nx.all_shortest_paths(Grafos[i],a,b)
-                    for path in shortpaths:
-                        if x in path:
-                            c += 1
-        Grafos[i].remove_node(a)
-    SP[x] = c
-# Hasta aca, D[x] = cantidad de shortest-paths
-# que pasan por el nodo x
-
-SP_sort = sorted(SP.items(),key=lambda x:x[1],reverse=True)
 
 
 ## Eigenvector:
