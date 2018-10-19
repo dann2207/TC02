@@ -3,6 +3,7 @@ import copy
 import time
 import csv
 import math
+import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -24,7 +25,6 @@ Nombre = {G_APMS: "G_APMS",
           G_Y2H: "G_Y2H"}
 
 DICT = {}
-
 
 for gr in GR:
     #Eigenvector------------------------------------------------------
@@ -118,10 +118,6 @@ for gr in GR:
     DICT[gr]["Y_random"] = Y_random
     DICT[gr]["Y_betweenness"] = Y_betweenness
     DICT[gr]["Y_eigenvector"] = Y_eigenvector
+    df = pd.DataFrame.from_dict(DICT[gr], orient='index')
+    df.to_csv('{}.csv'.format(Nombre[gr]))
 
-# DICT es un diccionario cuyas keys son los grafos
-# y los values son diccionarios {"x": x}, en donde x
-# son las listas que se usan para plotear la figura 3
-for gr in DICT.keys():
-	for s in DICT[gr].keys():
-		
